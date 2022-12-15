@@ -7,12 +7,13 @@ import Main from "./components/layout/Main";
 import "antd/dist/antd.css";
 import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
-import Compound from "./pages/Compound";
+import Compound from "./pages/Upgrade";
 import Transaction from "./pages/Tx";
 import UserProfile from "./pages/UserProfile";
 import Withdraw from "./pages/Withdraw";
 import Referrals from "./pages/Referrals";
 import Login from "./pages/SignIn";
+import Upgrade from "./pages/Upgrade";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -23,7 +24,7 @@ function App() {
    
       <Main>
           <Route exact path="/dashboard" component={Home} />
-          <Route exact path="/Compound" component={Compound} />
+          <Route exact path="/Upgrade" component={Upgrade} />
           <Route exact path="/Ledger" component={Transaction} />
           <Route exact path="/Fund" component={Fund} />
           <Route exact path="/Login" component={Login} />

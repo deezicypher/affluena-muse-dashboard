@@ -202,8 +202,8 @@ const Cart = () => {
                     <div align="middle">
                        Amount:  <br/><InputNumber style={{ width: 120 }} align="middle"
                           min={1000} max={9999}
-                          formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                          formatter={value => `₦ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          parser={value => value.replace(/\₦\s?|(,*)/g, '')}
                           onChange={value => setSAmount(value)}
                           
                         /><br/><br/>
@@ -249,8 +249,10 @@ const Cart = () => {
                                        <div align="middle">
                                     <h6></h6>
                                     </div>
-                                       <div align="middle"className="ant-card-meta-description">
-                                     
+                                    <div align="middle"className="ant-card-meta-description">
+                                       <Divider>min - 400,000</Divider>
+                                       
+                                           
                                        </div>
                                 
                               </Skeleton>
@@ -259,8 +261,8 @@ const Cart = () => {
                     <div align="middle">
                       Amount:  <br/><InputNumber style={{ width: 120 }} align="middle"
                           min={10000} max={49999}
-                          formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                          formatter={value => `₦ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          parser={value => value.replace(/\₦\s?|(,*)/g, '')}
                           onChange={value => setCAmount(value)}
                           
                           /><br/><br/>

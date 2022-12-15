@@ -25,13 +25,15 @@ import { useStateContext } from "../context/stateContext";
 function Home() {
   const { Title, Text } = Typography;
   const {user,stat,orders, getOrder, getStat} = useStateContext()
+  const [account_name, setAccountName] = useState('');
+  const [account_no, setAccountNo] = useState('');
 
 
   const { username, token} = user;
   
   const [addr, setAddr] = useState("")
 
-  const {roic, totalE,refE,cprofit} = stat
+  const {profit, totalEarning,referral_earning,cprofit} = stat
  
 
   const [capital, setCapital] = useState("")
@@ -109,7 +111,7 @@ function Home() {
     },
     {
       today: "Simple profit",
-      title: roic,
+      title: profit,
       persent: "+%",
       icon: dollor ,
       bnb: "bnb2",
@@ -131,15 +133,15 @@ function Home() {
     },
     {
       today: "Affiliate Earnings",
-      title: "+" + refCount,
-      persent: refE,
+      title: referral_earning,
+      persent: "+%",
       icon: profile,
       bnb: "bnb2",
     },
     
     {
       today: "Total Earned",
-      title: totalE,
+      title: totalEarning,
       persent: "%",
       icon: dollor,
       bnb: "bnb2",
@@ -169,7 +171,7 @@ function Home() {
 
 useEffect(() => {
  
-  console.log(user,username, token)
+ 
     axios.defaults.headers = {
       "Content-Type": "application/json",
     }
@@ -183,15 +185,18 @@ useEffect(() => {
     
     axios.get(`/api/profile?username=${username}`)
       .then(res => {
-        const {code, account_b,refCount, btc} = res.data
+        console.log(res)
+        const {code, account_b,refCount,account_name,account_no} = res.data
         setCapital(account_b)
         setRefCode(code)
         setRefCount(refCount)
+        setAccountName(account_name)
+        setAccountNo(account_no)
      
-        
       }).catch(err => console.log(err.response.data))
+      getStat(username, token)
     getOrder(username, token)
-    getStat(username, token)
+    
     
 
 
@@ -270,14 +275,18 @@ useEffect(() => {
           <Col xs={24} md={12} sm={24} lg={12} xl={10} className="mb-24">
           <Card bordered={false} className="criclebox h-full">
               <div className="timeline-box">
-                <Title level={5}>Account Info</Title>
-                
+                <Title level={5}>Account Info</Title>             
 <hr/>
 <Paragraph className="lastweek" style={{ marginBottom: 24 }}>
-                  Wallet Address :  <span className="bnb2">{addr}</span>
+                  Account Name :  <span className="bnb2">{account_name}</span>
+                  
                 </Paragraph>
                 <Paragraph className="lastweek" style={{ marginBottom: 24 }}>
-                Referral Code : <Input placeholder={refcode}  id="myInput" value={refcode} />
+                  Account No :  <span className="bnb2">{account_no}</span>
+                  
+                </Paragraph>
+                <Paragraph className="lastweek" style={{ marginBottom: 24 }}>
+                Refferral Code : <Input placeholder={refcode}  id="myInput" value={refcode} />
                 </Paragraph>
                 <Tooltip placement="top" trigger="click" title={xcopy}>
       

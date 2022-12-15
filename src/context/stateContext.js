@@ -39,6 +39,7 @@ export const StateContextProvider = ({children}) => {
             localStorage.setItem("user", JSON.stringify(newuser));
             setUser(newuser);
             }
+            toast.dismiss()
         }catch(err){
             console.log(err);
             if(err.response.data.msg){
@@ -66,6 +67,7 @@ export const StateContextProvider = ({children}) => {
                 if (expirationDate <= new Date()) {
                   logout()
                 } else {
+                    
                     checkAuthTimeout(
                       (expirationDate.getTime() - new Date().getTime()) / 1000
                     )
@@ -103,12 +105,14 @@ export const StateContextProvider = ({children}) => {
     }
 
     const getStat = async (username, token) => {
+        
        try{
             axios.defaults.headers = {
                 "Content-Type": "application/json",
                 Authorization: `Token ${token}`,
             }
             const stats = await axios.get(`/api/status?username=${username}`).then(res => res.data[0])
+            console.log(stats)
             setStat(stats);
             
         }catch(err){
@@ -120,9 +124,8 @@ export const StateContextProvider = ({children}) => {
 
 
     useEffect(()=> {
-        authCheckState(); 
-        setUser(localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):{})
-               
+        setUser(localStorage.getItem('user')?JSON.parse(localStorage.getItem("user")):{})   
+       
     },[])   
     
     
@@ -140,6 +143,7 @@ export const StateContextProvider = ({children}) => {
             setStat,
             login,
             logout,
+            authCheckState,
         }}>{children}</Context.Provider>
     )
     }

@@ -97,7 +97,7 @@ const Cart = () => {
     },
     customizations: {
       title: 'Simple Interest',
-      description: 'Payment for Compound Interest',
+      description: 'Payment for Simple Interest',
       logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
     },
   };
@@ -123,9 +123,11 @@ const Cart = () => {
   const handlePay = (response,product) => {
     const {status,charged_amount,flw_ref,transaction_id,tx_ref} = response;
     if(status === 'success'){
-        postpay(charged_amount,product,flw_ref,transaction_id,tx_ref)
+        const status = "Approved"
+        postpay(charged_amount,product,flw_ref,transaction_id,tx_ref,status)
     }else{
-        postpay(charged_amount,product,flw_ref,transaction_id,tx_ref)
+        const status = "Pending"
+        postpay(charged_amount,product,flw_ref,transaction_id,tx_ref, status)
     }
   }
 
@@ -325,9 +327,9 @@ const Cart = () => {
                     type="secondary"
                     style={{backgroundColor:"#f5a623",cursor:"pointer",borderRadius:'5px',padding:'5px 10px', color:"#ffffff", border:"none"}}
         onClick={camount? () => {
-          handleFlutterPayment({
+          handleFlutterCPayment({
             callback: (response) => {
-               console.log(response);
+                handlePay(response,"Compound Interest")
                 closePaymentModal() // this will close the modal programmatically
             },
             onClose: () => {},

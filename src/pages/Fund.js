@@ -6,13 +6,12 @@ import { toast } from 'react-hot-toast';
 import moment from "moment";
 // reactstrap components
 import { Redirect } from "react-router-dom";
-
+import { DownOutlined } from '@ant-design/icons';
 	
 
-import { Skeleton, Statistic, Card, Col, Row, Avatar,Button,InputNumber,Divider, Spin } from 'antd';
+import { Skeleton, Statistic, Card, Col, Row, Avatar,Button,InputNumber,Divider,Dropdown,Space,Spin } from 'antd';
 import { useStateContext } from "../context/stateContext";
 
-const { Countdown } = Statistic;
 const { Meta } = Card;
 
 const deadline = moment().add(15, 'minutes');
@@ -22,11 +21,48 @@ const deadline = moment().add(15, 'minutes');
 const Cart = () => {
 
   const {user} = useStateContext();
-    const [samount, setSAmount] = useState();
-    const [camount, setCAmount] = useState();
+    const [samount, setSAmount] = useState(200000);
+    const [camount, setCAmount] = useState(400000);
+    const [duration, setDuration] = useState(6);
+    const [sduration, setSDuration] = useState(6);
+    const [cduration, setCDuration] = useState(6);
+
+
  
   const {userId , token} = user
 
+  const handleMenuClick = (e) => {
+    console.log(e.key)
+    setDuration(e.key);
+    setSDuration(e.key);
+  };
+  const handleCMenuClick = (e) => {
+    setDuration(e.key);
+    setCDuration(e.key);
+  };
+
+  const items = [
+    {
+      label: '6 months',
+      key: 6
+    },
+    {
+      label: '8 months',
+      key: 8
+    },
+    {
+      label: '12 months',
+      key: 12
+    },
+  ];
+  const menuProps = {
+    items,
+    onClick: handleMenuClick,
+  };
+  const menuCProps = {
+    items,
+    onClick: handleCMenuClick,
+  };
 
   const handleS = e => {
     console.log(e.target.value)
@@ -49,7 +85,7 @@ const Cart = () => {
     }
   }
   const config = {
-    public_key: 'FLWPUBK_TEST-3a64c5ec380c5682e3877964a5af2972-X',
+    public_key: "FLWPUBK_TEST-da56eff24ecc4109b02a60d643baac29-X",
     tx_ref: Date.now(),
     amount: samount,
     currency: 'NGN',
@@ -66,7 +102,7 @@ const Cart = () => {
     },
   };
   const configC = {
-    public_key: 'FLWPUBK_TEST-3a64c5ec380c5682e3877964a5af2972-X',
+    public_key: process.env.REACT_APP_FKEY,
     tx_ref: Date.now(),
     amount: camount,
     currency: 'NGN',
@@ -84,14 +120,24 @@ const Cart = () => {
   };
   const handleFlutterPayment =  useFlutterwave(config)
 
+  const handlePay = (response,product) => {
+    const {status,charged_amount,flw_ref,transaction_id,tx_ref} = response;
+    if(status === 'success'){
+        postpay(charged_amount,product,flw_ref,transaction_id,tx_ref)
+    }else{
+        postpay(charged_amount,product,flw_ref,transaction_id,tx_ref)
+    }
+  }
 
   const handleFlutterCPayment =  useFlutterwave(configC)
 
   const uid = function(){
     return Date.now().toString(12) + Math.random().toString(20).substr(12);
 }
-  const postpay = async (amount,product,duration, proof,ftxid) => {
- 
+  
+  const postpay = async (amount,product,flw_ref,transaction_id,tx_ref,status) => {
+
+ /* Manual Payment
     const txid = uid()
     let form_data = new FormData();
     form_data.append('customer',userId)
@@ -102,53 +148,57 @@ const Cart = () => {
     form_data.append("txid", txid)
  
 
-
+*/
     
 
-      
+     
     
-      /*const user = {
-          customer: user_id,
+      const order = {
+          customer: userId,
           product: product,
-          amount: dollar,
-          duration: duration,
+          amount: amount,
+          duration: parseInt(duration),
           txid: transaction_id,
-          status: "Approved",
+          status: status,
           tx_ref:tx_ref,
           flw_ref:flw_ref
       }
       const omo = {
-          customer: 82,
-          product: 'Compound Interest',
-          duration: sduration,
-          amount: simpleAmount,
-          txid: "fjfjkjkjfj",
-          status: "Approved",
-          tx_ref:"i9ruiruiuiue9",
-          flw_ref:"eieinejuiiuiu3u33"
-      }*/
+        customer: userId,
+        product: 'Simple Interest',
+        duration: parseInt(duration),
+        amount: samount,
+        txid: "fjfjkjkjfj",
+        status: "Approved",
+        tx_ref:"i9ruiruiuiue9",
+        flw_ref:"eieinejuiiuiu3u33"
+    }
+      
       try {
         
        axios.defaults.headers = {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: `Token ${token}`,
           
       }
-   
-      const detail = await axios.post('/api/post-order/', form_data,{ headers: {
-        'content-type': 'multipart/form-data'
-      }}).then(res => res.data)
+
+   toast.loading("Loading...", {
+    id: "pay"
+   })
+      const detail = await axios.post('/api/post-order/', omo)
+      console.log(detail)
+     
               if(detail.status == 201){
-                toast.success('Successfully submitted, pending approval ') 
-                setTimeout(() => {
-                  
-                 <Redirect to="/user/tx" />;
-                }, 2000);
-                
+                toast.success("Payment Successfull", {
+                    id: "pay"
+                  })
               }
 
           }catch(err) {
-            toast.error("Can't proceed further at the moment ")
+            console.log(err.response);
+            toast.error("Can't process request at the moment ", {
+                id: "pay"
+            })
            
           }
 
@@ -172,14 +222,8 @@ const Cart = () => {
               lg={12}
               xl={12}
               className="mb-24">
-                          <Card
-                              
-                              
-                            >
-                                
-                                
-                              <Skeleton  loading={false} avatar active>
-                            
+                          <Card>
+                              <Skeleton  loading={false} avatar active>  
                                 <Meta
                                   avatar={<Avatar src={require("../assets/images/logo.png").default} />}
                                   title="Simple Interest Investor"
@@ -193,7 +237,14 @@ const Cart = () => {
                                        <div align="middle"className="ant-card-meta-description">
                                        <Divider>min - 200,000</Divider>
                                        
-                                           
+                                       <Dropdown menu={menuProps}>
+      <Button>
+        <Space>
+          {sduration} Months
+          <DownOutlined />
+        </Space>
+      </Button>
+    </Dropdown>
                                        </div>
                                 
                               </Skeleton>
@@ -201,27 +252,27 @@ const Cart = () => {
                     
                     <div align="middle">
                        Amount:  <br/><InputNumber style={{ width: 120 }} align="middle"
-                          min={1000} max={9999}
+                          min={20000} max={50000000}
                           formatter={value => `₦ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                          parser={value => value.replace(/\₦\s?|(,*)/g, '')}
+                         
                           onChange={value => setSAmount(value)}
                           
                         /><br/><br/>
-                    
+                    <Button onClick={() => postpay()}>Pay</Button>
                    
                     <button className="flutterwave-btn"
-                    style={{backgroundColor:"#f5a623",borderRadius:'5px',padding:'5px 10px', color:"#ffffff", border:"none"}}
+                    style={{backgroundColor:"#f5a623",cursor:"pointer", borderRadius:'5px',padding:'5px 10px', color:"#ffffff", border:"none"}}
         onClick={samount? () => {
           handleFlutterPayment({
             callback: (response) => {
-               console.log(response);
+               handlePay(response,"Simple Interest")
                 closePaymentModal() // this will close the modal programmatically
             },
             onClose: () => {},
           });
         }: handleS}
       >
-        Pay with Flutterwave
+        Pay {samount} with Flutterwave
       </button>   
                     </div>
                     
@@ -233,12 +284,7 @@ const Cart = () => {
               lg={12}
               xl={12}
               className="mb-24">
-                          <Card
-                              
-                              
-                            >
-                                
-                                
+                          <Card>
                               <Skeleton  loading={false} avatar active>
                             
                                 <Meta
@@ -251,7 +297,14 @@ const Cart = () => {
                                     </div>
                                     <div align="middle"className="ant-card-meta-description">
                                        <Divider>min - 400,000</Divider>
-                                       
+                                       <Dropdown menu={menuCProps}>
+      <Button>
+        <Space>
+        {cduration} Months
+          <DownOutlined />
+        </Space>
+      </Button>
+    </Dropdown>
                                            
                                        </div>
                                 
@@ -260,9 +313,9 @@ const Cart = () => {
                     
                     <div align="middle">
                       Amount:  <br/><InputNumber style={{ width: 120 }} align="middle"
-                          min={10000} max={49999}
+                          min={40000} max={100000000}
                           formatter={value => `₦ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                          parser={value => value.replace(/\₦\s?|(,*)/g, '')}
+                         
                           onChange={value => setCAmount(value)}
                           
                           /><br/><br/>
@@ -270,7 +323,7 @@ const Cart = () => {
                      
                       <button className="flutterwave-btn"
                     type="secondary"
-                    style={{backgroundColor:"#f5a623",borderRadius:'5px',padding:'5px 10px', color:"#ffffff", border:"none"}}
+                    style={{backgroundColor:"#f5a623",cursor:"pointer",borderRadius:'5px',padding:'5px 10px', color:"#ffffff", border:"none"}}
         onClick={camount? () => {
           handleFlutterPayment({
             callback: (response) => {

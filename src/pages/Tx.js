@@ -110,9 +110,7 @@ useEffect(()=>{
               className="invoice-list"
               dataSource={approved}
               renderItem={(item) => (
-                <List.Item
-                 
-                    >
+                <List.Item >
                  
                   <List.Item.Meta
                    description={moment(item.date_requested).format("MMM Do YYYY")}

@@ -1,12 +1,11 @@
 import React,{useEffect, useState} from "react";
-import axios from "axios";
+import axios from "../config";
 import moment from 'moment';
 
 
 import { Row,
     Col,
     Card,
-
     List,
    } from 'antd';
 import { authCheckState } from "../store/actions/auth";
@@ -29,24 +28,6 @@ const Referrals = () => {
 
 const [ref, setRef] = useState([])
 
-const data = [
-    {
-      name: "Ahmed",
-      date_joined: "12-10-21",
-      
-    },
-    {
-      name: "Hadrit Mary",
-      date_joined: "12-10-21",
-      
-    },
-    {
-        name: "Glory Manchi",
-        date_joined: "12-10-21",
-    },
-    
-
-  ];
 
 useEffect(()=>{
   axios.defaults.headers = {
@@ -54,7 +35,7 @@ useEffect(()=>{
     Authorization: `Token ${token}`
 }
 if(token){
-axios.get(`/listApi/refs?username=${username}`)
+axios.get(`/api/refs?username=${username}`)
     .then(res => {
       
        setRef(res.data.refs.reverse())

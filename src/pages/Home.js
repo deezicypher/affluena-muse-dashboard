@@ -244,7 +244,7 @@ useEffect(() => {
             className="header-solid h-full ant-invoice-card"
             title={[<h6 className="font-semibold m-0">Last Transactions (3) </h6>]}
             extra={[
-              <Link  to="/Ledger" className="ant-btn ant-btn-primary">
+              <Link  to="/Tx" className="ant-btn ant-btn-primary">
                 VIEW ALL
               </Link>,
             ]}

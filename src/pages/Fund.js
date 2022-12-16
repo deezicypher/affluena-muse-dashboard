@@ -217,13 +217,8 @@ const Cart = () => {
                     <Row>
 
                             <div >
-                            <Row className="rowgap-vbox" gutter={[24, 0]}>
-                        <Col    xs={24}
-              sm={24}
-              md={12}
-              lg={12}
-              xl={12}
-              className="mb-24">
+                            <Row gutter={[24, 0]}>
+       <Col span={24} md={12} className="mb-24">
                           <Card>
                               <Skeleton  loading={false} avatar active>  
                                 <Meta
@@ -280,13 +275,8 @@ const Cart = () => {
                     
                             </Card>
                           </Col>
-                          <Col  xs={24}
-              sm={24}
-              md={12}
-              lg={12}
-              xl={12}
-              className="mb-24">
-                          <Card>
+                         <Col span={24} md={12} className="mb-24">
+                          <Card >
                               <Skeleton  loading={false} avatar active>
                             
                                 <Meta

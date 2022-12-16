@@ -25,7 +25,7 @@ const Upgrade = () => {
   const {token, username, userId} = user;
   const [simple, setSimple] = useState([])
   const [topup, setTopUp]= useState("")
-  const [amount, setAmount] = useState();
+  const [amount, setAmount] = useState(50000);
   const[pk, setPk] = useState("");
 
   let history = useHistory();
@@ -94,12 +94,13 @@ const Upgrade = () => {
           Authorization: `Token ${token}`
       }
       try{
+       
       const detail = await axios.post('/api/top-up/', omo)
               if(detail.status == 201){
                 toast.success("Top Up Successfull", {
                     id: "upgrade"
                   })
-                  history.push("/Ledger");
+                  history.push("/Upgrades");
               }
           }catch(err) {
             console.log(err.response);

@@ -7,7 +7,7 @@ import React,{useEffect,useState} from "react";
 
 
 import { PlusOutlined} from "@ant-design/icons";
-import axios from "axios";
+import axios from "../config";
 
 
 import {
@@ -26,7 +26,6 @@ const moment= require('moment')
 const Transaction = () => {
   const {user} = useStateContext();
   const {token, username} = user;
-  const [orders, setOrders] = useState([])
   const [pending, setPending] = useState([]);
   const [approved, setApproved] = useState([])
 
@@ -70,32 +69,30 @@ const Transaction = () => {
     </svg>,
   ];
 useEffect(()=>{
-  axios.defaults.headers = {
-    "Content-Type": "application/json",
-    Authorization: `Token ${token}`
-}
-axios.get(`/api/simpleInt/?username=${username}`)
-    .then(res => {
-      
-      setApproved(res.data.reverse())
-       
-    }).catch(
-      err => {
-        console.log(err)
-      }
-    )
-  axios.get(`/api/orders/?username=${username}`)
-    .then(res => {
+  const getOrder = async (username, token) => {
+    try{
         
-          res.data.forEach(function(x) {
-            if (x.status === "Pending") {
-              setPending(pending => [...pending, x])
+           axios.defaults.headers = {
+               "Content-Type": "application/json",
+               Authorization: `Token ${token}`
+           }
+           const orders = await axios.get(`/api/orders?username=${username}`).then(res => res.data.reverse());
+           function checkApproved(x) {
+            return x.status === "Approved"
           }
-    
-       
-    })
+          function checkPending(x) {
+            return x.status === "Pending"
+          }
+          const approved = orders.filter(checkApproved)
+          const pending = orders.filter(checkPending)
+          setPending(pending)
+          setApproved(approved)
 
-}).catch()
+       }catch(err){
+           console.log(err);
+       }
+   }
+   getOrder(username, token)
 }, [token, username])
 
     return (
@@ -114,13 +111,12 @@ axios.get(`/api/simpleInt/?username=${username}`)
               dataSource={approved}
               renderItem={(item) => (
                 <List.Item
-                  actions={[<Button type="link" href={item.ticket} target="_blank" >{download} Receipt</Button>]}
-                
+                 
                     >
                  
                   <List.Item.Meta
                    description={moment(item.date_requested).format("MMM Do YYYY")}
-                   title={`Affluena ${item.name}`}
+                   title={`Affluena ${item.product}`}
                     avatar={
                       <Avatar size="small" className="text-fill">
                         <PlusOutlined style={{ fontSize: 10 }} />
@@ -129,7 +125,7 @@ axios.get(`/api/simpleInt/?username=${username}`)
 
                   />
         
-                  <div className="amount"><span className="text-success">${item.amount.replace(/\d(?=(\d{3})+\.)/g, '$&,')} </span></div>
+                  <div className="amount"><span className="text-success">${item.amount} </span></div>
                 </List.Item>
               )}
             />
@@ -151,7 +147,7 @@ axios.get(`/api/simpleInt/?username=${username}`)
                 <List.Item
                 actions={[<Button type="link"> {item.status}</Button>]}
                     >
-                 
+                
                   <List.Item.Meta
               description={moment(item.date_ordered).format("MMM Do YYYY")}
               title={`Affluena ${item.product}`}
@@ -164,7 +160,7 @@ axios.get(`/api/simpleInt/?username=${username}`)
 
                   />
         
-                  <div className="amount">${item.amount.replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>
+                  <div className="amount">${item.amount}</div>
                 </List.Item>
               )}
             />

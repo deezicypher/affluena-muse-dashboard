@@ -84,7 +84,7 @@ axios.get(`/api/simpleInt/?username=${username}`)
         console.log(err)
       }
     )
-  axios.get(`/api/orders?username=${username}`)
+  axios.get(`/api/orders/?username=${username}`)
     .then(res => {
         
           res.data.forEach(function(x) {

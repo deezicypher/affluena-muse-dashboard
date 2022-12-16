@@ -14,6 +14,8 @@ import Withdraw from "./pages/Withdraw";
 import Referrals from "./pages/Referrals";
 import Login from "./pages/SignIn";
 import Upgrade from "./pages/Upgrade";
+import Ledger from "./pages/Ledger";
+import Upgrades from "./pages/Upgrades";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -25,7 +27,9 @@ function App() {
       <Main>
           <Route exact path="/dashboard" component={Home} />
           <Route exact path="/Upgrade" component={Upgrade} />
-          <Route exact path="/Ledger" component={Transaction} />
+          <Route exact path="/Ledger" component={Ledger} />
+          <Route exact path="/Upgrades" component={Upgrades} />
+          <Route exact path="/Tx" component={Transaction} />
           <Route exact path="/Fund" component={Fund} />
           <Route exact path="/Login" component={Login} />
           <Route exact path="/Withdraw" component={Withdraw} />

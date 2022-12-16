@@ -11,6 +11,7 @@ import {
   Button,
   List,
   Avatar,
+  Modal
 } from "antd";
 import { useStateContext } from "../context/stateContext";
 
@@ -21,6 +22,7 @@ const Plans = () => {
   const {token, username} = user;
   const [simple, setSimple] = useState([]);
   const [compound, setCompound] = useState([])
+  const [item, setItem] = useState({});
 
 
   const download = [
@@ -41,12 +43,18 @@ const Plans = () => {
     </svg>,
   ];
   
-const receipt = [
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-</svg>
+    
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-]
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
 
 useEffect(()=>{
@@ -67,6 +75,18 @@ useEffect(()=>{
 
     return (
       <>
+      <Modal title="Upgrade " open={isModalOpen} onOk={handleOk} onCancel={handleCancel} >
+      <Row className="rowgap-vbox" gutter={[24, 0]}>
+                        <Col xs={24}>
+                       
+                        <div align="middle">
+                            <p>Amount - {item?.amount}</p>
+                            <p>Created On - {moment(item.date_requested).format("MMM Do YYYY")}</p>
+                            <p>Due on - {moment(item.due).format("MMM Do YYYY")}</p>
+                    </div>
+                        </Col>
+      </Row>
+      </Modal>
        <Row gutter={[24, 0]}>
        <Col span={24} md={12} className="mb-24">
           <Card
@@ -81,7 +101,10 @@ useEffect(()=>{
               dataSource={simple}
               renderItem={(item) => (
                 <List.Item 
-                actions={[<Button type="link" style={{cursor:"pointer"}} href={item.ticket} target="_blank" >{download} Receipt</Button>,<Button type="link">Details</Button>]}
+                actions={[<Button type="link" style={{cursor:"pointer"}} href={item.ticket} target="_blank" >{download} Receipt</Button>,<Button type="link" onClick={() => {
+                    setItem(item)
+                    showModal()
+                }} >Details</Button>]}
                 >
                  
                   <List.Item.Meta
@@ -114,10 +137,13 @@ useEffect(()=>{
               className="invoice-list"
               dataSource={compound}
               renderItem={(item) => (
+               
                 <List.Item
-                actions={[<Button type="link" href={item.ticket} target="_blank" >{download} Receipt</Button>,<Button type="link">Details</Button>]}
-              
-                    >
+                actions={[<Button type="link" style={{cursor:"pointer"}} href={item.ticket} target="_blank" >{download} Receipt</Button>,<Button type="link" onClick={() => {
+                    setItem(item)
+                    showModal()
+                }} >Details</Button>]}
+                >
                 
                   <List.Item.Meta
               description={moment(item.date_ordered).format("MMM Do YYYY")}

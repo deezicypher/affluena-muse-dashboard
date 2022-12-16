@@ -16,6 +16,7 @@ import Login from "./pages/SignIn";
 import Upgrade from "./pages/Upgrade";
 import Ledger from "./pages/Ledger";
 import Upgrades from "./pages/Upgrades";
+import Plans from "./pages/Plans";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -28,6 +29,7 @@ function App() {
           <Route exact path="/dashboard" component={Home} />
           <Route exact path="/Upgrade" component={Upgrade} />
           <Route exact path="/Ledger" component={Ledger} />
+          <Route exact path="/Plans" component={Plans} />
           <Route exact path="/Upgrades" component={Upgrades} />
           <Route exact path="/Tx" component={Transaction} />
           <Route exact path="/Fund" component={Fund} />

@@ -9,7 +9,7 @@ import { Redirect } from "react-router-dom";
 import { DownOutlined } from '@ant-design/icons';
 	
 
-import { Skeleton, Statistic, Card, Col, Row, Avatar,Button,InputNumber,Divider,Dropdown,Space,Spin } from 'antd';
+import { Skeleton,Card, Col, Row, Avatar,Button,InputNumber,Divider,Dropdown,Space,Spin } from 'antd';
 import { useStateContext } from "../context/stateContext";
 
 const { Meta } = Card;

@@ -233,7 +233,7 @@ function Sidenav({ color }) {
             <span className="label">Transactions</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="7">
+        <Menu.Item key="8">
           <NavLink to="/Ledger">
             <span
               className="icon"
@@ -246,7 +246,20 @@ function Sidenav({ color }) {
             <span className="label">Ledger</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="7">
+        <Menu.Item key="9">
+          <NavLink to="/Plans">
+            <span
+              className="icon"
+              style={{
+                background: page === "billing" ? color : "",
+              }}
+            >
+              {tables}
+            </span>
+            <span className="label">Plans</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="10">
           <NavLink to="/upgrades">
             <span
               className="icon"
@@ -259,7 +272,7 @@ function Sidenav({ color }) {
             <span className="label">Upgrades</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="8">
+        <Menu.Item key="11">
           <NavLink to="/Account">
             <span
               className="icon"
@@ -275,7 +288,7 @@ function Sidenav({ color }) {
 
 
   
-        <Menu.Item key="9">
+        <Menu.Item key="12">
           <NavLink to="/logout" onClick={()=> logout()}>
             <span
               className="icon"

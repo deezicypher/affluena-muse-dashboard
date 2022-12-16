@@ -51,7 +51,7 @@ const Upgrade = () => {
 
   const handlePay = (response) => {
     const {status,charged_amount,transaction_id} = response;
-    if(status === 'success'){
+    if(status === 'successful'){
         const status = "Approved"
         Topup(charged_amount,transaction_id,status)
     }else{
@@ -95,7 +95,7 @@ const Upgrade = () => {
       }
       try{
        
-      const detail = await axios.post('/api/top-up/', omo)
+      const detail = await axios.post('/api/top-up/', order)
               if(detail.status == 201){
                 toast.success("Top Up Successfull", {
                     id: "upgrade"
@@ -146,7 +146,7 @@ const Upgrade = () => {
                           onChange={value => setAmount(value)}
                           
                         /><br/><br/>
-                    <Button onClick={() => Topup({amount})}>Pay</Button>
+                    {/*<Button onClick={() => Topup({amount})}>Pay</Button>*/}
                    
                     <button className="flutterwave-btn"
                     style={{backgroundColor:"#f5a623",cursor:"pointer", borderRadius:'5px',padding:'5px 10px', color:"#ffffff", border:"none"}}

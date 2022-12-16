@@ -121,8 +121,10 @@ const Cart = () => {
   const handleFlutterPayment =  useFlutterwave(config)
 
   const handlePay = (response,product) => {
+   
+  
     const {status,charged_amount,flw_ref,transaction_id,tx_ref} = response;
-    if(status === 'success'){
+    if(status === 'successful'){
         const status = "Approved"
         postpay(charged_amount,product,flw_ref,transaction_id,tx_ref,status)
     }else{
@@ -187,8 +189,8 @@ const Cart = () => {
    toast.loading("Loading...", {
     id: "pay"
    })
-      const detail = await axios.post('/api/post-order/', omo)
-      console.log(detail)
+ 
+      const detail = await axios.post('/api/post-order/', order)
      
               if(detail.status == 201){
                 toast.success("Payment Successfull", {
@@ -255,7 +257,7 @@ const Cart = () => {
                           onChange={value => setSAmount(value)}
                           
                         /><br/><br/>
-                    <Button onClick={() => postpay()}>Pay</Button>
+                    {/*<Button onClick={() => postpay()}>Pay</Button>*/}
                    
                     <button className="flutterwave-btn"
                     style={{backgroundColor:"#f5a623",cursor:"pointer", borderRadius:'5px',padding:'5px 10px', color:"#ffffff", border:"none"}}

@@ -62,9 +62,7 @@ useEffect(()=>{
               className="invoice-list"
               dataSource={upgrades}
               renderItem={(item) => (
-                <List.Item
-                    >
-                 
+                <List.Item>
                   <List.Item.Meta
                    description={moment(item.date_requested).format("MMM Do YYYY")}
                    title={`Affluena Simple Interest`}
@@ -73,7 +71,6 @@ useEffect(()=>{
                         <PlusOutlined style={{ fontSize: 10 }} />
                       </Avatar>
                     }
-
                   />
         
                   <div className="amount"><span className="text-success">${item.amount.replace(/\d(?=(\d{3})+\.)/g, '$&,')} </span></div>

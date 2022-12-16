@@ -9,6 +9,7 @@ import {  Row,
 
     import PhoneInput from 'react-phone-number-input'
 import { useStateContext } from "../context/stateContext";
+import { toast} from 'react-hot-toast';
 
 
 const { Meta } = Card;
@@ -78,16 +79,22 @@ const UserProfile = () => {
 
           axios.put(`/rest-auth/update-profile/${userId}/`, user)
             .then(res => {
-              console.log(res)
-              setDetail('Updated')
+              
+             toast.success("Updated profile",{
+              id:"profile"
+             })
               const userE = JSON.parse(localStorage.getItem("detail"));
               if (userE) {
     
                 {
                   email === userE.email ?
-                    setDetail('Updated')
+                  toast.success("Updated profile",{
+                    id:"profile"
+                   })
                     :
-                    setDetail("Updated. Confirm New Email.. check your mail")
+                    toast.success("Updated. Confirm New Email.. check your mail",{
+                      id:"profile"
+                     })
                 }
                 setLoad(false)
               }
@@ -96,7 +103,9 @@ const UserProfile = () => {
             }
     
             ).catch(err => {
-             setError("Sorry you can't proceed further at the moment")
+             toast.error("Sorry you can't proceed further at the moment",{
+              id:"profile"
+             })
               setLoad(false)
             })
       };

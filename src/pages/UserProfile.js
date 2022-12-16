@@ -31,7 +31,6 @@ const UserProfile = () => {
         phone: "",
         name: "",
         country:"",
-        city: "",
         address: "",
         bank_name: "",
         account_name:"",
@@ -43,12 +42,13 @@ const UserProfile = () => {
      
     })
     
-    const {username,email,phone,name,country,city, new_password1,new_password2,old_password} = formData
+    const {username,email,phone,name,country,bank_name,account_name,account_no,address,state, new_password1,new_password2,old_password} = formData
     
 
       const [form] = Form.useForm();
       const [form2] = Form.useForm();
       const handleChange = key => e => {
+       
         setFormData({ ...formData, [key]: e.target.value })
     
     }
@@ -60,8 +60,8 @@ const UserProfile = () => {
 
     const onFinish = () => {
         setLoad(true)
-        axios.default.headers = {
-            "Content-Type": 'multipart/form-data',
+        axios.defaults.headers = {
+            "Content-Type": 'application/json',
             Authorization: `Token ${token}`
           }
           const user = {
@@ -69,12 +69,16 @@ const UserProfile = () => {
               "email":email,
               "phone":phone,
               "country":country,
-             
+             "account_no":account_no,
+             "account_name":account_name,
+             "bank_name":bank_name,
+             "state":state,
+             "address":address,
           }
-          
+
           axios.put(`/rest-auth/update-profile/${userId}/`, user)
             .then(res => {
-              window.scrollTo(0, 0)
+              console.log(res)
               setDetail('Updated')
               const userE = JSON.parse(localStorage.getItem("detail"));
               if (userE) {
@@ -97,25 +101,7 @@ const UserProfile = () => {
             })
       };
 
-    
-    const handleWallet = (btc_wallet) => {
-        
-        let WAValidator = require('wallet-address-validator');
-    
-        let formIsValid = true;
-        if (btc_wallet) {
-          btc_wallet.split(' ').join('');
-    
-          let valid = WAValidator.validate(btc_wallet, 'BTC');
-          if (!valid) {
-            formIsValid = false
-               }
-    
-  
-          return formIsValid;
-        }
-        // This will log 'This is a valid address' to the console.
-      }
+
     
     
       const handlePassChange = ()  => {
@@ -126,9 +112,9 @@ const UserProfile = () => {
           new_password2: new_password2,
           old_password: old_password
         }
-        console.log(pass)
+      
           setPLoad(true)
-          axios.default.headers = {
+          axios.defaults.headers = {
             "Content-Type": "application/json",
             Authorization: `Token ${token}`
           }
@@ -195,13 +181,18 @@ const UserProfile = () => {
     }
   
     axios.get('/rest-auth/user/')
-      .then(res => {
+      .then(res => {       
         form.setFieldsValue({
             username: res.data.username,
             email:res.data.email,
             name:res.data.full_name,
             country:res.data.country,
-            phone:res.data.phone
+            phone:res.data.phone,
+            account_name:res.data.account_name,
+            bank_name:res.data.bank_name,
+            account_no:res.data.account_no,
+            state:res.data.state,
+            address:res.data.address,
 
           });
           setFormData({...formData, 
@@ -209,7 +200,12 @@ const UserProfile = () => {
            
             name:res.data.full_name,
             country:res.data.country,
-            phone:res.data.phone
+            phone:res.data.phone,
+            account_name:res.data.account_name,
+            bank_name:res.data.bank_name,
+            account_no:res.data.account_no,
+            state:res.data.state,
+            address:res.data.address,
 
 
 
@@ -349,6 +345,7 @@ defaultCountry="US"
                       name="country"
                       label="Country"
                       onChange={handleChange('country')}
+                      value={country}
                       rules={[
                         {
                           required: true,
@@ -364,6 +361,7 @@ defaultCountry="US"
                       name="state"
                       label="state"
                       onChange={handleChange('state')}
+                      value={state}
                       rules={[
                         {
                           required: true,
@@ -378,6 +376,7 @@ defaultCountry="US"
                   <Form.Item
                       name="address"
                       label="Address"
+                      value={address}
                       onChange={handleChange('address')}
                       rules={[
                         {
@@ -391,9 +390,10 @@ defaultCountry="US"
                   </Col>
                   <Col xs={24} xl={12} style={{ padding: "10px" }}>
                   <Form.Item
-                      name="bank"
+                      name="bank_name"
                       label="Bank"
-                      onChange={handleChange('bank')}
+                      onChange={handleChange('bank_name')}
+                      value={bank_name}
                       rules={[
                         {
                           required: true,
@@ -406,9 +406,11 @@ defaultCountry="US"
                   </Col>
                   <Col xs={24} xl={12} style={{ padding: "10px" }}>
                   <Form.Item
-                      name="accountname"
+                      name="account_name"
                       label="Account Name"
-                      onChange={handleChange('bank')}
+                      value={account_name}
+                    
+                      onChange={handleChange('account_name')}
                       rules={[
                         {
                           required: true,
@@ -421,9 +423,10 @@ defaultCountry="US"
                   </Col>
                   <Col xs={24} xl={12} style={{ padding: "10px" }}>
                   <Form.Item
-                      name="accountno"
+                      name="account_no"
                       label="Account No"
-                      onChange={handleChange('accountno')}
+                      value={account_no}
+                      onChange={handleChange('account_no')}
                       rules={[
                         {
                           required: true,
@@ -561,7 +564,7 @@ defaultCountry="US"
                     }
                   </Col>
                   <Col xs={24} xl={12} style={{ padding: "10px" }}>
-                  {loading?
+                  {passload?
               <Space size="middle">
               <Spin size="large" />
             </Space> 

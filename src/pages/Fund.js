@@ -16,7 +16,7 @@ const { Meta } = Card;
 
 const deadline = moment().add(15, 'minutes');
 
-// Moment is also OK
+
 
 const Cart = () => {
 

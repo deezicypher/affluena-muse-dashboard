@@ -13,7 +13,7 @@ export const StateContextProvider = ({children}) => {
    
     const logout = () => {
         localStorage.removeItem("user");
-        window.location.href("/")
+        window.location.href = "/"
       };
       
     const checkAuthTimeout = expirationTime => {
@@ -126,9 +126,8 @@ export const StateContextProvider = ({children}) => {
 
     useEffect(()=> {
         setUser(localStorage.getItem('user')?JSON.parse(localStorage.getItem("user")):{})   
-       
+       authCheckState()
     },[])   
-    
     
 
     return (

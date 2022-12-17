@@ -185,7 +185,7 @@ useEffect(() => {
     
     axios.get(`/api/profile?username=${username}`)
       .then(res => {
-        console.log(res)
+        
         const {code, account_b,refCount,account_name,account_no} = res.data
         setCapital(account_b)
         setRefCode(code)
@@ -200,7 +200,7 @@ useEffect(() => {
     
 
 
-}},[])
+}},[username, token])
 
 
   return (

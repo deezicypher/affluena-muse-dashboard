@@ -27,23 +27,6 @@ function App() {
       <BrowserRouter>
    
       <Main>
-      {user !== null ?
-          <>
-          <Route
-            path="/app"
-            render={() => {
-              window.location.href = '/';
-              return null;
-            }} />
-            <Route
-            path="*"
-            render={() => {
-              window.location.href = '/';
-              return null;
-            }} />
-            </>
-            :
-            <>
           <Route exact path="/dashboard" component={Home} />
           <Route exact path="/Upgrade" component={Upgrade} />
           <Route exact path="/Ledger" component={Ledger} />
@@ -51,14 +34,13 @@ function App() {
           <Route exact path="/Upgrades" component={Upgrades} />
           <Route exact path="/Tx" component={Transaction} />
           <Route exact path="/Fund" component={Fund} />
-          <Route exact path="/Login" component={Login} />
           <Route exact path="/Withdraw" component={Withdraw} />
           <Route exact path="/Account" component={UserProfile} />
           <Route exact path="/Downline" component={Referrals} />
-            <Redirect from="/app" to="/dashboard" />
-            </>
-}     
+          <Redirect from="/app" to="/dashboard" />
         </Main>
+    
+    
       </BrowserRouter>
     </div>
   );

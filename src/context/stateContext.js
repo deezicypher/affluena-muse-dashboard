@@ -124,8 +124,10 @@ export const StateContextProvider = ({children}) => {
 
 
     useEffect(()=> {
-        setUser(localStorage.getItem('user')?JSON.parse(localStorage.getItem("user")):{})   
-       authCheckState()
+        if(localStorage.getItem('user')){
+            setUser(JSON.parse(localStorage.getItem("user")))  
+        }   
+        authCheckState()
     },[])   
     
 

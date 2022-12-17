@@ -13,7 +13,7 @@ export const StateContextProvider = ({children}) => {
    
     const logout = () => {
         localStorage.removeItem("user");
-        window.location.href = "/"
+        return window.location.href = "/"
       };
       
     const checkAuthTimeout = expirationTime => {
@@ -24,7 +24,6 @@ export const StateContextProvider = ({children}) => {
 
 
     const login = async data => {
-        console.log(data)
         try{
             toast.loading('Loging you in...', {
                 id: 'login'
@@ -113,7 +112,7 @@ export const StateContextProvider = ({children}) => {
                 Authorization: `Token ${token}`,
             }
             const stats = await axios.get(`/api/status?username=${username}`).then(res => res.data[0])
-            console.log(stats)
+
             setStat(stats);
             
         }catch(err){

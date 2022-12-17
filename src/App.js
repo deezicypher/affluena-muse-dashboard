@@ -20,12 +20,30 @@ import Plans from "./pages/Plans";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
+
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
    
       <Main>
+      {user !== null ?
+          <>
+          <Route
+            path="/app"
+            render={() => {
+              window.location.href = '/';
+              return null;
+            }} />
+            <Route
+            path="*"
+            render={() => {
+              window.location.href = '/';
+              return null;
+            }} />
+            </>
+            :
+            <>
           <Route exact path="/dashboard" component={Home} />
           <Route exact path="/Upgrade" component={Upgrade} />
           <Route exact path="/Ledger" component={Ledger} />
@@ -37,10 +55,10 @@ function App() {
           <Route exact path="/Withdraw" component={Withdraw} />
           <Route exact path="/Account" component={UserProfile} />
           <Route exact path="/Downline" component={Referrals} />
-          <Redirect from="/app" to="/dashboard" />
+            <Redirect from="/app" to="/dashboard" />
+            </>
+}     
         </Main>
-    
-    
       </BrowserRouter>
     </div>
   );
